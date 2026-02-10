@@ -1,6 +1,6 @@
 //function1
 function sayHello(){
-    return "Hello Word";
+    return "Hello World";
 }
 
 
@@ -82,7 +82,7 @@ console.log(results);
 
 
 function circleArea (r:number):number{
-   const pi:number 3.1415;
+   const pi:number = 3.1415;
    let area:number = pi * Math.pow(r,2);
    let roundArea: number =Math.round(area*100/100);
    return roundArea;
@@ -90,5 +90,6 @@ function circleArea (r:number):number{
 let r: number= 10;
 let area:number =circleArea(r)
 console.log("area of the circle with radius "+r+" is "+area);
+
 
 

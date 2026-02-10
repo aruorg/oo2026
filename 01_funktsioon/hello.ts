@@ -3,7 +3,7 @@ console.log(message);
 
 
 let fulltname: string = "Anette Aruorg";
-let age: number = 22;
+let age: number = 20;
 
 
 console.log("My name is " +fulltname+ " my age is " +age);
