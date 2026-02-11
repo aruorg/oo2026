@@ -1,0 +1,47 @@
+//GPA calc
+var Course = /** @class */ (function () {
+    function Course(credits) {
+        this.credits = credits;
+    }
+    //Methon with formula to find GPA
+    Course.prototype.gpaContribution = function (grade) {
+        return grade * this.credits;
+    };
+    Course.prototype.getCredits = function () {
+        return this.credits;
+    };
+    return Course;
+}());
+var math = new Course(4);
+var english = new Course(6);
+var programming = new Course(2);
+//
+var mathGrade = 4.0;
+var englishGrade = 3.3;
+var programmingGrade = 3.7;
+var totalPoints = 0;
+totalPoints += math.gpaContribution(mathGrade);
+totalPoints += english.gpaContribution(englishGrade);
+totalPoints += programming.gpaContribution(programmingGrade);
+var totalCredits = math.getCredits() + english.getCredits() + programming.getCredits();
+//Total points / total credits
+var gpa = totalPoints / totalCredits;
+console.log("My gpa is: ", gpa);
+//Create array to pass grades of many students
+var students1 = [
+    { name: "Alice", math: 4.0, english: 3.3, programming: 3.7 },
+    { name: "Bob", math: 3.0, english: 3.0, programming: 2.7 },
+    { name: "Max", math: 3.0, english: 3.8, programming: 1.7 },
+];
+//calculate the gpa for each student
+for (var _i = 0, students1_1 = students1; _i < students1_1.length; _i++) {
+    var student = students1_1[_i];
+    var totalPoints_1 = 0;
+    totalPoints_1 += math.gpaContribution(student.math);
+    totalPoints_1 += english.gpaContribution(student.english);
+    totalPoints_1 += programming.gpaContribution(student.programming);
+    var gpa_1 = totalPoints_1 / totalCredits;
+    console.log(student.name + " GPA", gpa_1);
+    var roundGpa = math.round(gpa_1 * 100 / 100);
+    return roundGpa;
+}
