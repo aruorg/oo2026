@@ -52,7 +52,7 @@ for(let student of students1){
 
     let gpa=totalPoints/totalCredits;
     console.log(student.name + " GPA", gpa);
-    let roundGpa:number = Math.round(gpa*100/100);
+    let roundGpa:number = Math.round(gpa * 100) / 100
     return roundGpa;
 
 }
