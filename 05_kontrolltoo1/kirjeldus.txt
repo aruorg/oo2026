@@ -1,3 +1,5 @@
 Õppejõu käest valitud kolme tasemega kontrolltööülesanne.
 
 Punktid võib esitada eraldi programmidena
+
+esimene kt nelja esimese teema peale?

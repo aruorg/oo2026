@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="03_calculator.js"></script>
+    <script>
+        let calculators = [];
+
+        function startPage(){
+            calculators[0] = new CmToInches();
+            calculators[1] = new InchesToCm();
+            activateCalculator();
+        }
+        function activateCalculator(){
+            const select = document.getElementById("calculatorSelect");
+            const idx = select.selectedIndex;
+            const calc = calculators[idx];
+            const type1 = document.getElementById("type1");
+            const type2 = document.getElementById("type2");
+            const answer = document.getElementById("answer");
+            type1.innerText = calc.inputUnit();
+            type2.innerText = calc.outputUnit();
+            answer.innerText = "";
+            const input = document.getElementById("input1");
+            input.value = "";
+            
+        }
+        function buttonClick(){
+            const select = document.getElementById("calculatorSelect");
+            const input = document.getElementById("input1");
+            const answer = document.getElementById("answer");
+            const calc = calculators[select.selectedIndex];
+            const value = input.valueAsNumber;
+            answer.innerText = calc.calculate(value).toFixed(2);
+        }
+
+    </script>
+</head>
+<body onload="startPage()">
+    <input type="number" id="input1" onchange="buttonClick()">
+    <!--This diplay the input unit-->
+    <span id="type1"></span>
+    <input type="button" value="=" onchange="buttonClick()">
+    <span id="answer"></span>
+    <span id="type2"></span><br>
+
+    <select id="calculatorSelect" onchange="activateCalculator()">
+        <option value=""> cm to in </option>
+        <option value=""> in to cm </option>
+    </select>
+    
+</body>
+</html>
