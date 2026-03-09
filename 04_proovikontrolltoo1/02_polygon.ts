@@ -61,11 +61,7 @@ class Polygon{
         g.lineTo(this.x[0], this.y[0])
 
         g.stroke();
-
     }
-
-        
-    
 
 }
 
