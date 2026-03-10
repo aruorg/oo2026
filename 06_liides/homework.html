@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="homework.js"></script>
+    <script>
+        let calculators1 = [];
+
+        function startPage(){
+            calculators1[0] = new EurToUsd();
+            calculators1[1] = new UsdToEur();
+            calculators1[2] = new EurToGbp();
+            calculators1[3] = new GbpToEur();
+            activateCalculator1();
+        }
+        function activateCalculator1(){
+            const select = document.getElementById("calculatorSelect");
+            const idx = select.selectedIndex;
+            const calc = calculators1[idx];
+            const type1 = document.getElementById("type1");
+            const type2 = document.getElementById("type2");
+            const answer = document.getElementById("answer");
+            type1.innerText = calc.inputUnit();
+            type2.innerText = calc.outputUnit();
+            answer.innerText = "";
+            const input = document.getElementById("input1");
+            input.value = "";
+            
+        }
+        function buttonClick(){
+            const select = document.getElementById("calculatorSelect");
+            const input = document.getElementById("input1");
+            const answer = document.getElementById("answer");
+            const calc = calculators1[select.selectedIndex];
+            const value = input.valueAsNumber;
+
+            try{
+                const result = calc.calculate(value);
+                answer.innerText = result.toFixed(2);
+            } catch (err){
+                answer.innerText = err.message;
+            }
+        }
+
+    </script>
+</head>
+<body onload="startPage()">
+    <input type="number" id="input1" oninput="buttonClick()">
+    <!--This diplay the input unit-->
+    <span id="type1"></span>
+    <input type="button" value="=" onclick="buttonClick()">
+    <span id="answer"></span>
+    <span id="type2"></span><br>
+
+    <select id="calculatorSelect" onchange="activateCalculator1()">
+        <option value=""> EUR to USD </option>
+        <option value=""> USD to EUR </option>
+        <option value=""> EUR to GBP </option>
+        <option value=""> GBP to EUR </option>
+    </select>
+    
+</body>
+</html>

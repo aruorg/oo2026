@@ -47,10 +47,10 @@ class Ball{
         this.x=x;
         this.y=y;
 
-        this.vx=3;
-        this.vy=2;
+        this.vx=vx;
+        this.vy=vy;
 
-        this.radius=20;
+        this.radius=radius;
     }
 
      draw(ctx:CanvasRenderingContext2D) {
