@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        input[type=button]{width: 50px}
+        #panel1{width: 157px;
+                height: 20px;
+                margin-bottom: 10px;
+                border: 1px solid pink;}
+    </style>
+    <script>
+        let calcobj=null;
+        let exports={};
+        function startPage(){
+            calcobj=new Calculator();
+
+            document.getElementById("panel1").innerText=calcobj.getPanelContent();
+        }
+        //runs everytimme button pressed
+        function buttonPress(ev){
+            //the value of the clicked button so 5 = 5
+            calcobj.pressButton(ev.target.value);
+            //update display with text
+            document.getElementById("panel1").innerText=calcobj.getPanelContent();
+        }
+        window.startPage=startPage;
+        window.buttonPress=buttonPress;
+    </script>
+    <script src="03_calculator.js"></script>
+</head>
+<body onload="startPage()">
+    <div id="panel1"></div>
+    <input type="button" value="1" onclick="buttonPress(event)"/>
+    <input type="button" value="2" onclick="buttonPress(event)"/>
+    <input type="button" value="3" onclick="buttonPress(event)"/><br>
+    <input type="button" value="4" onclick="buttonPress(event)"/>
+    <input type="button" value="5" onclick="buttonPress(event)"/>
+    <input type="button" value="6" onclick="buttonPress(event)"/><br>
+    <input type="button" value="7" onclick="buttonPress(event)"/>
+    <input type="button" value="8" onclick="buttonPress(event)"/>
+    <input type="button" value="9" onclick="buttonPress(event)"/><br>
+    <input type="button" value="0" onclick="buttonPress(event)"/>
+    <input type="button" value="+" onclick="buttonPress(event)"/>
+    <input type="button" value="-" onclick="buttonPress(event)"/><br>
+    <input type="button" value="=" onclick="buttonPress(event)"/>
+    <input type="button" value="C" onclick="buttonPress(event)"/>
+
+</body>
+</html>
