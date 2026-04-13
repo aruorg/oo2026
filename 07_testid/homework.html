@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Account</title>
+    <style>
+        input[type = button]{width: 50px}
+        #panel1{
+            width: 150px;
+            height: 20px;
+            margin-bottom: 10px;
+            border: 2px solid blue;
+        }
+    </style>
+
+    <script>
+        let bankobj = null;
+        let exports = {};
+
+        function startPage(){
+            bankobj = new BankAccount();
+            document.getElementById("panel1").innerText = bankobj.getBalance()
+        }
+
+        function buttonPress(ev){
+            bankobj.pressButton(ev.target.value);
+            document.getElementById("panel1").innerText = bankobj.getBalance()
+            document.getElementById("error").innerText = bankobj.getError()
+        }
+        window.startPage = startPage;
+        window.buttonPress = buttonPress;
+    </script>
+
+    <script src="homework.js"></script>
+</head>
+<body onload="startPage()">
+    <div id="panel1"></div>
+    <div id="error" style="color:red;"></div>
+    <input type="button" value="+" onclick="buttonPress(event)"/> Deposit 10<br>
+    <input type="button" value="-" onclick="buttonPress(event)"/> Withdraw 10<br>
+</body>
+</html>
