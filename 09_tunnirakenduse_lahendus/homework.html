@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My very own personal digital kettle</title>
+    <script src="homework.js"></script>
+    <script>
+
+        let battery; 
+
+        function startPage(){
+            document.getElementById("output").innerText =
+            "Insert information and start charging";
+        }
+
+        function startCharging(){
+            const capacity = document.getElementById("capacity").valueAsNumber;
+            const charge= document.getElementById("charge").valueAsNumber;
+            const power = document.getElementById("power").valueAsNumber;
+
+            if(isNaN(capacity) || isNaN(charge) || isNaN(power)) {
+                document.getElementById("output").innerText = 
+                "Please fill all fields before starting charging process";
+                return;
+            }
+
+            battery = new Battery(capacity, charge);
+            battery.setChargingPower(power);
+
+            document.getElementById("output").innerText =
+             `Charging - current charge: ${battery.getCharge().toFixed(2)}Wh`
+
+        }
+
+        function chargeOneMinute(){
+           if(!battery) {
+                document.getElementById("output").innerText =
+                    "Please start charging first";
+                return;
+            }
+
+            battery.chargeOneMinute();
+
+            document.getElementById("output").innerText =
+             `After 1 minute: ${battery.getCharge().toFixed(2)} Wh`;
+
+            document.getElementById("currentCharge").innerText =
+            battery.getCharge().toFixed(2);
+        }
+
+        function calculateTime(){
+            if(!battery) {
+                document.getElementById("output").innerText = 
+                "Please fill all fields and start charging";
+                return;
+            }
+            const target = document.getElementById("target").valueAsNumber;
+
+            if (isNaN(target)) {
+                document.getElementById("output").innerText =
+                "Enter a valid target charge";
+                return;
+            }
+
+            let time = battery.calculateChargingTime(target);
+
+            document.getElementById("estTime").innerText = 
+            `Charging time is: ${time.toFixed(0)}Minutes`;
+        }
+
+    </script>
+</head>
+<body onload="startPage()">
+
+    <label>Capacity (Wh):</label>
+    <input type="number" id="capacity"><br>
+
+    <label>Current Charge (Wh):</label>
+    <input type="number" id="charge"><br>
+
+    <label>Charging Power (W):</label>
+    <input type="number" id="power"><br>
+
+    <label>Target Charge (Wh):</label>
+    <input type="number" id="target"><br>
+
+    <button onclick="startCharging()">Start Charging</button><br>
+    <button onclick="chargeOneMinute()">Charge 1 Minute</button><br>
+    <button onclick="calculateTime()">Calculate Time</button><br>
+
+    <p>Current Charge: <span id="currentCharge"></span> Wh</p><br>
+    <p id="output"></p>
+    <p id="estTime"></p>
+
+
+</body>
+</html>
