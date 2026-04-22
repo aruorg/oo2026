@@ -17,66 +17,45 @@ var AbstractEmployee = /** @class */ (function () {
     function AbstractEmployee(name) {
         this.name = name;
     }
-    AbstractEmployee.prototype.work = function (hours) {
-        return hours * this.getSalary();
-    };
-    AbstractEmployee.prototype.introduce = function () {
-        console.log("Employee: " + this.name);
-    };
     return AbstractEmployee;
 }());
 var Developer = /** @class */ (function (_super) {
     __extends(Developer, _super);
-    function Developer(name, baseSalary) {
+    function Developer(name, salary) {
         var _this = _super.call(this, name) || this;
-        _this.baseSalary = baseSalary;
+        _this.salary = salary;
         return _this;
     }
     Developer.prototype.getSalary = function () {
-        return this.baseSalary;
+        return this.salary;
     };
     return Developer;
 }(AbstractEmployee));
 var Manager = /** @class */ (function (_super) {
     __extends(Manager, _super);
-    function Manager(name, baseSalary) {
+    function Manager(name, salary) {
         var _this = _super.call(this, name) || this;
-        _this.bonusActive = false;
-        _this.baseSalary = baseSalary;
+        _this.salary = salary;
+        _this.bonus = false;
         return _this;
     }
-    Manager.prototype.setBonus = function (state) {
-        this.bonusActive = state;
+    Manager.prototype.setBonus = function (active) {
+        this.bonus = active;
     };
     Manager.prototype.getSalary = function () {
-        return this.bonusActive ? this.baseSalary + 1000 : this.baseSalary;
-    };
-    Manager.prototype.work = function (hours) {
-        if (this.bonusActive && hours > 10) {
-            throw new Error("Overtime not allowed with active bonus mode");
-        }
-        return _super.prototype.work.call(this, hours);
+        //chacking if bonus is active and adding a bonus or just giving salary
+        return this.bonus ? this.salary + 1000 : this.salary;
     };
     return Manager;
 }(AbstractEmployee));
-var EmployeeGroup = /** @class */ (function (_super) {
-    __extends(EmployeeGroup, _super);
-    function EmployeeGroup(name) {
-        var _this = _super.call(this, name) || this;
-        _this.employees = [];
-        return _this;
+var Department = /** @class */ (function () {
+    function Department() {
+        this.employees = [];
     }
-    EmployeeGroup.prototype.addEmployee = function (e) {
+    Department.prototype.add = function (e) {
         this.employees.push(e);
     };
-    return EmployeeGroup;
-}(AbstractEmployee));
-var Department = /** @class */ (function (_super) {
-    __extends(Department, _super);
-    function Department() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Department.prototype.getSalary = function () {
+    Department.prototype.getTotalSalary = function () {
         var total = 0;
         for (var _i = 0, _a = this.employees; _i < _a.length; _i++) {
             var e = _a[_i];
@@ -85,39 +64,52 @@ var Department = /** @class */ (function (_super) {
         return total;
     };
     return Department;
-}(EmployeeGroup));
-var FreelancePool = /** @class */ (function (_super) {
-    __extends(FreelancePool, _super);
-    function FreelancePool() {
-        return _super !== null && _super.apply(this, arguments) || this;
+}());
+var Contractor = /** @class */ (function () {
+    function Contractor(name, hours) {
+        this.name = name;
+        this.hours = hours;
     }
-    FreelancePool.prototype.getSalary = function () {
-        var sum = 0;
-        for (var _i = 0, _a = this.employees; _i < _a.length; _i++) {
-            var e = _a[_i];
-            sum += e.getSalary();
+    Contractor.prototype.getSalary = function () {
+        var hourlyRate = 20;
+        return this.hours * hourlyRate;
+    };
+    return Contractor;
+}());
+var FreelancePool = /** @class */ (function () {
+    function FreelancePool() {
+        this.contractors = [];
+    }
+    FreelancePool.prototype.add = function (c) {
+        this.contractors.push(c);
+    };
+    FreelancePool.prototype.getTotalSalary = function () {
+        var total = 0;
+        for (var _i = 0, _a = this.contractors; _i < _a.length; _i++) {
+            var c = _a[_i];
+            total += c.getSalary();
         }
-        return this.employees.length === 0 ? 0 : sum / this.employees.length;
+        return total;
+    };
+    FreelancePool.prototype.showSalaries = function () {
+        for (var _i = 0, _a = this.contractors; _i < _a.length; _i++) {
+            var c = _a[_i];
+            console.log(c.name + " salary:", c.getSalary());
+        }
     };
     return FreelancePool;
-}(EmployeeGroup));
-var dev1 = new Developer("Alice", 2000);
-console.log(dev1.getSalary());
-var mgr1 = new Manager("Bob", 3000);
-console.log(mgr1.getSalary());
-mgr1.setBonus(true);
-console.log("Manager with bonus:", mgr1.getSalary());
-try {
-    console.log(mgr1.work(12));
-}
-catch (e) {
-    console.log("Error:", e.message);
-}
-var dept = new Department("IT Dept");
-dept.addEmployee(dev1);
-dept.addEmployee(mgr1);
-console.log("Department total salary:", dept.getSalary());
-var pool = new FreelancePool("Contractors");
-pool.addEmployee(new Developer("Charlie", 1500));
-pool.addEmployee(new Developer("Dave", 1800));
-console.log("Freelance average salary:", pool.getSalary());
+}());
+var dev = new Developer("Alice", 2000);
+var mgr = new Manager("Bob", 3000);
+mgr.setBonus(true);
+console.log(dev.name + " salary:", dev.getSalary());
+console.log(mgr.name + " salary:", mgr.getSalary());
+var dept = new Department();
+dept.add(dev);
+dept.add(mgr);
+console.log("Department salary:", dept.getTotalSalary());
+var pool = new FreelancePool();
+pool.add(new Contractor("Charlie", 165)); // 50 hours in week
+pool.add(new Contractor("Dave", 160)); // 60 hours in week
+pool.showSalaries();
+console.log("Total freelance salary:", pool.getTotalSalary());

@@ -1,74 +1,45 @@
 abstract class AbstractEmployee {
-    name: string;
-
-    constructor(name: string) {
-        this.name = name;
-    }
+    constructor(public name: string) {}
 
     abstract getSalary(): number;
-
-    work(hours: number): number {
-        return hours * this.getSalary();
-    }
-
-    introduce(): void {
-        console.log("Employee: " + this.name);
-    }
 }
 
 class Developer extends AbstractEmployee {
-    baseSalary: number;
-
-    constructor(name: string, baseSalary: number) {
+    constructor(name: string, private salary: number) {
         super(name);
-        this.baseSalary = baseSalary;
     }
 
     getSalary(): number {
-        return this.baseSalary;
+        return this.salary;
     }
 }
 
 class Manager extends AbstractEmployee {
-    bonusActive: boolean = false;
-    baseSalary: number;
+    private bonus = false;
 
-    constructor(name: string, baseSalary: number) {
+    constructor(name: string, private salary: number) {
         super(name);
-        this.baseSalary = baseSalary;
     }
 
-    setBonus(state: boolean) {
-        this.bonusActive = state;
+    setBonus(active: boolean) {
+        this.bonus = active;
     }
 
     getSalary(): number {
-        return this.bonusActive ? this.baseSalary + 1000 : this.baseSalary;
-    }
-
-    work(hours: number): number {
-        if (this.bonusActive && hours > 10) {
-            throw new Error("Overtime not allowed with active bonus mode");
-        }
-        return super.work(hours);
+        //chacking if bonus is active and adding a bonus or just giving salary
+        return this.bonus ? this.salary + 1000 : this.salary;
     }
 }
 
-abstract class EmployeeGroup extends AbstractEmployee {
-    employees: AbstractEmployee[] = [];
+class Department {
+    private employees: AbstractEmployee[] = [];
 
-    constructor(name: string) {
-        super(name);
-    }
-
-    addEmployee(e: AbstractEmployee) {
+    add(e: AbstractEmployee) {
         this.employees.push(e);
     }
-}
 
-class Department extends EmployeeGroup {
-    getSalary(): number {
-        let total = 0;
+    getTotalSalary(): number {
+    let total = 0;
 
         for (let e of this.employees) {
             total += e.getSalary();
@@ -78,41 +49,58 @@ class Department extends EmployeeGroup {
     }
 }
 
-class FreelancePool extends EmployeeGroup {
+class Contractor {
+    constructor(public name: string, public hours: number) {}
+
     getSalary(): number {
-        let sum = 0;
-
-        for (let e of this.employees) {
-            sum += e.getSalary();
-        }
-
-        return this.employees.length === 0 ? 0 : sum / this.employees.length;
+        const hourlyRate = 20;
+        return this.hours * hourlyRate;
     }
 }
 
-let dev1 = new Developer("Alice", 2000);
-console.log(dev1.getSalary());
+class FreelancePool {
+    private contractors: Contractor[] = [];
 
-let mgr1 = new Manager("Bob", 3000);
-console.log(mgr1.getSalary());
+    add(c: Contractor) {
+        this.contractors.push(c);
+    }
 
-mgr1.setBonus(true);
-console.log("Manager with bonus:", mgr1.getSalary());
+    getTotalSalary(): number {
+    let total = 0;
 
-try {
-    console.log(mgr1.work(12));
-} catch (e) {
-    console.log("Error:", (e as Error).message);
+        for (let c of this.contractors) {
+            total += c.getSalary();
+        }
+
+        return total;
+    }
+
+    showSalaries() {
+        for (let c of this.contractors) {
+            console.log(c.name + " salary:", c.getSalary());
+        }
+    }
 }
 
-let dept = new Department("IT Dept");
-dept.addEmployee(dev1);
-dept.addEmployee(mgr1);
 
-console.log("Department total salary:", dept.getSalary());
+let dev = new Developer("Alice", 2000);
+let mgr = new Manager("Bob", 3000);
 
-let pool = new FreelancePool("Contractors");
-pool.addEmployee(new Developer("Charlie", 1500));
-pool.addEmployee(new Developer("Dave", 1800));
+mgr.setBonus(true);
 
-console.log("Freelance average salary:", pool.getSalary());
+console.log(dev.name + " salary:", dev.getSalary());
+console.log(mgr.name + " salary:", mgr.getSalary());
+
+let dept = new Department();
+dept.add(dev);
+dept.add(mgr);
+
+console.log("Department salary:", dept.getTotalSalary());
+
+let pool = new FreelancePool();
+
+pool.add(new Contractor("Charlie", 165)); // 50 hours in week
+pool.add(new Contractor("Dave", 160)); // 60 hours in week
+
+pool.showSalaries();
+console.log("Total freelance salary:", pool.getTotalSalary());

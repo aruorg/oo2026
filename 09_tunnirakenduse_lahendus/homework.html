@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My very own personal digital kettle</title>
+    <title>My very own personal digital battery charger</title>
     <script src="homework.js"></script>
     <script>
 
-        let battery; 
+        let battery;
+        let targetReached = false; 
 
         function startPage(){
             document.getElementById("output").innerText =
@@ -42,11 +43,26 @@
 
             battery.chargeOneMinute();
 
+            const target = document.getElementById("target").valueAsNumber;
+
             document.getElementById("output").innerText =
              `After 1 minute: ${battery.getCharge().toFixed(2)} Wh`;
 
             document.getElementById("currentCharge").innerText =
             battery.getCharge().toFixed(2);
+
+            if (isNaN(target)) {
+                document.getElementById("output").innerText =
+                    "Enter a valid target charge";
+                return;
+            }
+
+            if (battery.getCharge() >= target){
+                document.getElementById("message").innerText =
+                    "Battery charged to target level";
+            targetReached = true;
+                return;
+            }
         }
 
         function calculateTime(){
@@ -56,12 +72,6 @@
                 return;
             }
             const target = document.getElementById("target").valueAsNumber;
-
-            if (isNaN(target)) {
-                document.getElementById("output").innerText =
-                "Enter a valid target charge";
-                return;
-            }
 
             let time = battery.calculateChargingTime(target);
 
@@ -92,6 +102,7 @@
     <p>Current Charge: <span id="currentCharge"></span> Wh</p><br>
     <p id="output"></p>
     <p id="estTime"></p>
+    <p id="message"></p>
 
 
 </body>
