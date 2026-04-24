@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My very own personal digital aquarium</title>
+    <script src="Exam.js"></script>
+    <script>
+
+        let aquarium = null;
+
+        function startPage(){
+            document.getElementById("output").innerText = "Insert information about your aquarium"
+        }
+
+        function AquariumVolume(){
+            const length = document.getElementById("length").valueAsNumber;
+            const height = document.getElementById("height").valueAsNumber;
+            const width = document.getElementById("width").valueAsNumber;
+
+            if(isNaN(length) || isNaN(height) || isNaN(width)) {
+                document.getElementById("output").innerText = "Please fill all fields";
+                return;
+            }
+
+            aquarium = new Aquarium(length,height, width);
+            aquarium.getAquariumVolume();
+            document.getElementById("output").innerText =
+             `Aquarium volume is: ${aquarium.getAquariumVolume()} Cm3`
+
+        }
+
+        function CurrentWater(){
+            if(!aquarium) 
+            return;
+
+            document.getElementById("levelOutput").innerText =
+            `Aquarium is filled: ${aquarium.CurrentWater()} %`
+        }
+
+        function AddingWater(){
+            const addedAmount = document.getElementById("addedWater").valueAsNumber;
+
+            if(!aquarium) {
+                document.getElementById("output").innerText = "Please find aquarium volume first";
+                return;
+            }
+
+            if (isNaN(addedAmount)) {
+                document.getElementById("output").innerText = "Please enter water amount";
+                return;
+    }
+            const result = aquarium.AddWater(addedAmount);
+
+            document.getElementById("output").innerText = result;
+            document.getElementById("levelOutput").innerText =
+                `Aquarium is filled: ${aquarium.getCurrentWaterLevel().toFixed(2)} %`;
+
+        }
+
+        function RemovingWater(){
+            const removedAmount = document.getElementById("removedWater").valueAsNumber;
+
+            if(isNaN(removedAmount)) {
+                document.getElementById("output").innerText = "Please enter water amount";
+                return;
+            }
+
+            const result = aquarium.RemoveWater(removedAmount);
+
+            document.getElementById("output").innerText = result;
+            document.getElementById("levelOutput").innerText =
+                `Aquarium is filled: ${aquarium.getCurrentWaterLevel().toFixed(2)} %`;
+        }
+
+    </script>
+</head>
+<body onload="startPage()">
+    <label>Aqurium length(cm): </label>
+    <input type="number" id="length"></input> <br>
+
+    <label>Aqurium width(cm): </label>
+    <input type="number" id="width"></input> <br>
+
+    <label>Aqurium height(cm): </label>
+    <input type="number" id="height"></input> <br>
+
+    <button value="aquariumVolume" onclick="AquariumVolume()">Find aquarium volume</button> <br>
+    
+    <label>Add water(ml): </label>
+    <input type="number" id="addedWater"></input> <br>
+    <button value="addedWater" onclick="AddingWater()">Add water</button><br>
+
+    <label>Remove water(ml): </label>
+    <input type="number" id="removedWater"></input> <br>
+    <button value="removedWater" onclick="RemovingWater()">Remove water</button><br>
+
+    <h2 id="levelOutput"></h2><br>
+
+    <h2 id="output"></h2>
+
+
+</body>
+</html>

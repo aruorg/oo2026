@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>idk Material and Energy?</title>
+    <script src="materials.copy.js"></script>
+    <script>
+
+        let waterpot = null;
+        let ironRadiator = null;
+        let airInRoom = null;
+
+
+        function startPage(){
+            document.getElementById("output").innerText =
+            "Insert information";
+        }
+
+        
+    </script>
+</head>
+<body onload="startPage()">
+
+    <h1>Material heating</h1>
+
+    <h2 id="output"></h2>
+
+    <h3>Water</h3>
+    <label>Mass (kg):</label>
+    <input type="number" id="mass"><br>
+
+    <label>SCH(Specific heat capacity):</label>
+    <input type="number" id="sch"><br>
+
+    <label>Initial temperature(C):</label>
+    <input type="number" id="waterTemp"><br>
+
+    <label>Add energy(j):</label>
+    <input type="number" id="energy"><br>
+
+    
+
+    <h3>Iron</h3>
+
+    <label>Mass (kg):</label>
+    <input type="number" id="mass"><br>
+
+    <label>SCH(Specific heat capacity):</label>
+    <input type="number" id="sch"><br>
+
+    <label>Initial temperature(C):</label>
+    <input type="number" id="ironTemp"><br>
+
+    <label>Add energy(j):</label>
+    <input type="number" id="energy"><br>
+
+    <h3>Air</h3>
+
+    <label>room width(m):</label>
+    <input type="number" id="width"><br>
+
+    <label>room length(m):</label>
+    <input type="number" id="length"><br>
+
+    <label>room height(m):</label>
+    <input type="number" id="height"><br>
+
+    <label>Initial temperature(C):</label>
+    <input type="number" id="airTemp"><br>
+
+    <button onclick="startHeating()">Create object</button><br>
+    <button onclick="chargeOneMinute()">Charge 1 Minute</button><br>
+    <button onclick="calculateTime()">Calculate Time</button><br>
+
+    <p>Current Charge: <span id="currentCharge"></span> Wh</p><br>
+    <p id="output"></p>
+
+
+</body>
+</html>
