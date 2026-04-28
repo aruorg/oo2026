@@ -32,20 +32,6 @@ var Material = /** @class */ (function () {
     };
     return Material;
 }());
-var waterPot = new Material(3, 4200, 20);
-console.log(waterPot.CurrentTemperature());
-waterPot.EnergyChange(10000);
-console.log(waterPot.CurrentTemperature());
-var ironRadiator = new Material(10, 412, 20);
-console.log(ironRadiator.CurrentTemperature());
-ironRadiator.EnergyChange(10000);
-console.log(ironRadiator.CurrentTemperature());
-if (ironRadiator.CurrentTemperature() > waterPot.CurrentTemperature()) {
-    var changeEnergy = 1000;
-    ironRadiator.EnergyChange(-changeEnergy);
-    waterPot.EnergyChange(changeEnergy);
-}
-console.log(waterPot.CurrentTemperature(), ironRadiator.CurrentTemperature());
 var AirAmount = /** @class */ (function (_super) {
     __extends(AirAmount, _super);
     function AirAmount(roomLenght, roomWidth, roomHeight, temperature) {
@@ -60,12 +46,8 @@ function EqualTemp(m) {
     var joulesSum = 0;
     //going through each object one by one
     for (var i = 0; i < m.length; i++) {
-        joulesKelvinSum = +m[i].getJoulesPerKelvin();
-        joulesSum = +m[i].getJoulesPerKelvin() * m[i].CurrentTemperature();
+        joulesKelvinSum += m[i].getJoulesPerKelvin();
+        joulesSum += m[i].getJoulesPerKelvin() * m[i].CurrentTemperature();
     }
     return joulesSum / joulesKelvinSum;
 }
-var waterPot1 = new Material(3, 4200, 21);
-var ironRadiator1 = new Material(10, 412, 55);
-var airInRoom = new AirAmount(3, 2, 2.5, 20);
-console.log("equal temperature for objects is:", EqualTemp([waterPot1, ironRadiator1, airInRoom]));

@@ -25,13 +25,7 @@ class Material{
     }
 }
 
-if(ironRadiator.CurrentTemperature() > waterPot.CurrentTemperature()){
-    let changeEnergy:number = 1000;
-    ironRadiator.EnergyChange(-changeEnergy);
-    waterPot.EnergyChange(changeEnergy);
-}
 
-console.log(waterPot.CurrentTemperature(), ironRadiator.CurrentTemperature())
 
 class AirAmount extends Material{
 
@@ -42,15 +36,15 @@ class AirAmount extends Material{
 
 function EqualTemp(m: Array<Material>): number{
     //how much energy is needed to increase all things by 1C
-    let joulesKeölvinSum = 0;
+    let joulesKelvinSum = 0;
     //total heat
     let joulesSum = 0;
 
     //going through each object one by one
     for(let i = 0; i<m.length; i++){
-        joulesKeölvinSum =+ m[i].getJoulesPerKelvin();
-        joulesSum =+ m[i].getJoulesPerKelvin()*m[i].CurrentTemperature();
-    }
+        joulesKelvinSum += m[i].getJoulesPerKelvin();
+        joulesSum += m[i].getJoulesPerKelvin() * m[i].CurrentTemperature();
 
-    return joulesSum/joulesKeölvinSum;
+    }
+        return joulesSum/joulesKelvinSum;
 }

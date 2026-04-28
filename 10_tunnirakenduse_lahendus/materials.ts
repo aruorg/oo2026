@@ -53,17 +53,17 @@ class AirAmount extends Material{
 
 function EqualTemp(m: Array<Material>): number{
     //how much energy is needed to increase all things by 1C
-    let joulesKeölvinSum = 0;
+    let joulesKelvinSum = 0;
     //total heat
     let joulesSum = 0;
 
     //going through each object one by one
     for(let i = 0; i<m.length; i++){
-        joulesKeölvinSum =+ m[i].getJoulesPerKelvin();
+        joulesKelvinSum =+ m[i].getJoulesPerKelvin();
         joulesSum =+ m[i].getJoulesPerKelvin()*m[i].CurrentTemperature();
     }
 
-    return joulesSum/joulesKeölvinSum;
+    return joulesSum/joulesKelvinSum;
 }
 
 let waterPot1 = new Material(3, 4200, 21);
