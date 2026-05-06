@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam</title>
+    <script src="Exam2.js"></script>
+    <script>
+
+        let car = null;
+        let truck = null;
+        let passcar = null;
+
+        function startPage(){
+            document.getElementById("output").innerText = "Insert information and start"
+        }
+
+        function CarList(){
+            const length = document.getElementById("length").valueAsNumber;
+            const mass = document.getElementById("mass").valueAsNumber;
+            const brand = document.getElementById("brand").value;
+
+            if(isNaN(length) || isNaN(mass)) {
+                document.getElementById("output").innerText = "Please fill all fields before starting the heater";
+                return;
+            }
+
+            car = new Car(length, mass, brand);
+            car.getLength();
+            car.getMass();
+            car.getBrand();
+            document.getElementById("list").innerText =
+             `Car length: ${car.getLength()}| Car mass: ${car.getMass()}| Car brand:${car.getBrand()}`
+             return;
+        }
+
+        function ControlPass(){
+            const mass = document.getElementById("Pmass").valueAsNumber;
+
+            passCar = new PassengerCar(mass);
+            passCar.weightControl();
+
+            document.getElementById("output").innerText =
+             `Passenger car weight: ${passCar.weightControl()}`
+             return;
+        }
+
+        function CalcDrivingDistance(){
+            const time = document.getElementById("time").valueAsNumber;
+            const startX = document.getElementById("startDistance").valueAsNumber;
+            const endX = document.getElementById("endDistance").valueAsNumber;
+            
+
+            truck = new Truck(time, startX, endX);
+            truck.calcDrivingDistance();
+            truck.getDrivingTime();
+
+            document.getElementById("output").innerText =
+             `Truck driving distance ${truck.calcDrivingDistance(), truck.getDrivingTime()}`
+             return;
+
+        }
+
+        
+
+    </script>
+</head>
+<body onload="startPage()">
+    <label>Car length(cm): </label>
+    <input type="number" id="length"></input> <br>
+
+    <label>Car mass(kg): </label>
+    <input type="number" id="mass"></input> <br>
+
+    <label>Car Brand: </label>
+    <input type="string" id="brand"></input> <br>
+
+    <button value="addCarList" onclick="CarList()">Add car to list</button> <br>
+
+    <label>Passenger Car mass(kg): </label>
+    <input type="number" id="Pmass"></input> <br>
+
+    <button value="controlPass" onclick="ControlPass()">Check for passenger car weight</button> <br>
+
+     <label>Driving time(minutes): </label>
+    <input type="number" id="time"></input> <br>
+
+    <label>Start x-coordinate: </label>
+    <input type="number" id="startDistance"></input> <br>
+
+    <label>End x-coordinate: </label>
+    <input type="number" id="endDistance"></input> <br>
+
+   
+
+    <button value="calcDistance" onclick="CalcDrivingDistance()">Find driving distance</button> <br>
+
+    <h2 id="output"></h2> <br>
+    <h2>Cars list</h2> <br>
+    <h3 id="list"></h3>
+
+
+</body>
+</html>
