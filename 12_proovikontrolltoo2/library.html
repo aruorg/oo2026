@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Library System</title>
+
+    <script>
+
+        let library = null;
+        let exports = {};
+
+        function startPage(){
+
+            library = new Library();
+
+            updateCategories();
+        }
+
+        function updateForm(){
+
+            const type =
+                document.getElementById("type").value;
+
+            document.getElementById("book-fields").style.display =
+                type === "book" ? "" : "none";
+
+            document.getElementById("dvd-fields").style.display =
+                type === "dvd" ? "" : "none";
+        }
+
+        function addItem(){
+
+            const type =
+                document.getElementById("type").value;
+
+            let item;
+
+            try{
+
+                if (type === "book"){
+
+                    item = new Book(
+
+                        document.getElementById("id").value,
+
+                        document.getElementById("title").value,
+
+                        document.getElementById("author").value,
+
+                        Number(document.getElementById("year").value),
+
+                        document.getElementById("category").value,
+
+                        Number(document.getElementById("pages").value),
+
+                        document.getElementById("ISBN").value
+                    );
+
+                } else {
+
+                    item = new DVD(
+
+                        document.getElementById("id").value,
+
+                        document.getElementById("title").value,
+                        document.getElementById("author").value,
+                        Number(document.getElementById("year").value),
+                        Number(document.getElementById("duration").value),
+                        document.getElementById("category").value
+                    );
+                }
+
+                library.addItem(item);
+
+                showItems();
+
+                updateCategories();
+
+            } catch (e){
+
+                alert("Error adding item: " + e.message);
+            }
+        }
+
+        function showItems(){
+
+            const out =
+                document.getElementById("output");
+
+            out.innerHTML = "";
+
+            const items =
+                library.getAll();
+
+            if(items.length === 0){
+
+                out.innerText = "(no items)";
+
+                return;
+            }
+
+            items.forEach(item => {
+
+                const div =
+                    document.createElement("div");
+
+                div.textContent =
+                    item.getSummary();
+
+                out.appendChild(div);
+            });
+        }
+
+        function updateCategories(){
+
+            const filter =
+                document.getElementById("categoryFilter");
+
+            filter.innerHTML =
+                `<option value="all">All Categories</option>`;
+
+            const categories =
+                library.getCategories();
+
+            categories.forEach(cat => {
+
+                const option =
+                    document.createElement("option");
+
+                option.value = cat;
+
+                option.textContent = cat;
+
+                filter.appendChild(option);
+            });
+        }
+
+        function filterByCategory(){
+
+            const category =
+                document.getElementById("categoryFilter").value;
+
+            const items =
+                library.getItemsByCategory(category);
+
+            const out =
+                document.getElementById("categoryOutput");
+
+            out.innerHTML = "";
+
+            if(items.length === 0){
+
+                out.innerText = "(no items found)";
+
+                return;
+            }
+
+            items.forEach(item => {
+
+                const div =
+                    document.createElement("div");
+
+                div.textContent =
+                    item.getSummary();
+
+                out.appendChild(div);
+            });
+        }
+
+         function loadFile(){
+        const file = document.getElementById("fileInput").files[0];
+        // If no file selected → stop
+        if (!file) return;
+        // FileReader reads file content
+        const reader = new FileReader();
+        // After file is read
+        reader.onload = function(e) {
+            // Convert text → objects
+            library.loadFromText(e.target.result);
+            // Update display
+            showItems();
+            updateCategories();
+        };
+        // Start reading file as text
+        reader.readAsText(file);}
+
+
+        function download(){
+
+            const blob =
+                new Blob([library.toText()]);
+
+            const url =
+                URL.createObjectURL(blob);
+
+            const a =
+                document.createElement("a");
+
+            a.href = url;
+
+            a.download = "library.txt";
+
+            a.click();
+        }
+
+        window.startPage = startPage;
+        window.addItem = addItem;
+        window.loadFile = loadFile;
+        window.download = download;
+        window.updateForm = updateForm;
+        window.filterByCategory = filterByCategory;
+        window.showItems = showItems;
+
+    </script>
+
+    <script src="library.js"></script>
+
+</head>
+
+<body onload="startPage()">
+
+    <h1>Library System</h1>
+
+    <hr>
+
+    <h3>Upload File</h3>
+
+    <input type="file" id="fileInput">
+
+    <button onclick="loadFile()">
+        Load
+    </button>
+
+    <hr>
+
+    <h3>Add Item</h3>
+
+    <label>Type:</label>
+
+    <select id="type" onchange="updateForm()">
+
+        <option value="book">Book</option>
+
+        <option value="dvd">DVD</option>
+
+    </select>
+
+    <br><br>
+
+    <input id="id" placeholder="ID">
+
+    <input id="title" placeholder="Title">
+
+    <input id="author" placeholder="Author">
+
+    <input id="year" placeholder="Year">
+
+    <input id="category" placeholder="Category">
+
+    <!-- Book -->
+
+    <span id="book-fields">
+
+        <input
+            id="pages"
+            type="number"
+            placeholder="Pages"
+        >
+
+        <input
+            id="ISBN"
+            placeholder="ISBN"
+        >
+
+    </span>
+
+    <!-- DVD -->
+
+    <span
+        id="dvd-fields"
+        style="display:none"
+    >
+
+        <input
+            id="duration"
+            type="number"
+            placeholder="Duration"
+        >
+
+    </span>
+
+    <br><br>
+
+    <button onclick="addItem()">
+        Add Item
+    </button>
+
+    <hr>
+
+    <h3>Filter by Category</h3>
+
+    <select id="categoryFilter">
+
+        <option value="all">
+            All Categories
+        </option>
+
+    </select>
+
+    <button onclick="filterByCategory()">
+        Search
+    </button>
+
+    <div
+        id="categoryOutput"
+        style="font-family:monospace"
+    ></div>
+
+    <hr>
+
+    <h3>All Items</h3>
+
+    <button onclick="showItems()">
+        Refresh
+    </button>
+
+    <div
+        id="output"
+        style="font-family:monospace"
+    ></div>
+
+    <hr>
+
+    <h3>Download</h3>
+
+    <button onclick="download()">
+        Download
+    </button>
+
+</body>
+</html>
